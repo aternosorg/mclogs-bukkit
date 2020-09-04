@@ -1,0 +1,24 @@
+name: Mclogs
+version: 2.1
+author: Aternos Gmbh
+main: gs.mclo.bukkit.MclogsBukkitLoader
+api-version: 1.13
+website: mclo.gs
+commands:
+  mclogs:
+    description: Share your latest log to the mclogs API
+    usage: "/mclogs <list|share> <filename>"
+    permission: mclogs.share.latest
+
+permissions:
+  mclogs.list:
+    description: Allows you to list all available log files
+    default: false
+  mclogs.share:
+    children:
+      latest:
+        description: Allows you to share the current log file
+        default: true
+      all:
+        description: Allows you to share all log files
+        default: false
