@@ -2,6 +2,8 @@ package gs.mclo.bukkit;
 
 import gs.mclo.mclogs.APIResponse;
 import gs.mclo.mclogs.MclogsAPI;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,9 +32,15 @@ public class CommandMclogs implements CommandExecutor {
             return true;
         }
         else if (args.length == 1 && args[0].equals("list")) {
-            String[] logs = MclogsAPI.listLogs(runDir);
-            commandSender.sendMessage("Available logs: \n" + String.join(",\n",logs));
             //list logs
+            String[] logs = MclogsAPI.listLogs(runDir);
+
+            commandSender.sendMessage(ChatColor.GREEN + "Available logs:");
+
+            String base = "tellraw " +commandSender.getName();
+            for (String log: logs) {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), base + " {\"text\":\""+log+"\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/mclogs share "+log+"\"}}");
+            }
             return true;
         }
         else if (args.length == 2 && args[0].equals("share")) {
@@ -61,14 +69,16 @@ public class CommandMclogs implements CommandExecutor {
             }
             APIResponse response = MclogsAPI.shareLog(is);
             if (response.success) {
-                commandSender.sendMessage("Your log has been shared: "+response.url);
+                commandSender.sendMessage(ChatColor.GREEN + "Your log has been shared: " + ChatColor.BLUE + response.url);
             }
             else {
+                commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
                 logger.log(Level.SEVERE,"An error occurred when sharing your log");
                 logger.log(Level.SEVERE, response.error);
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE,"An error occurred when sharing your log");
+            commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
+            logger.log(Level.SEVERE,"An error occurred when reading your log");
             e.printStackTrace();
         }
     }
