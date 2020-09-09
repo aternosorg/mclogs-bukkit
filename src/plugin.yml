@@ -9,6 +9,6 @@ api-version: 1.13
 
 commands:
   mclogs:
-    description: Share your logs to the mclogs API
+    description: Upload your logs to https://mclo.gs
     usage: "/mclogs <list|share> <filename>"
     permission: mclogs

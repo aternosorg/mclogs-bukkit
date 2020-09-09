@@ -67,16 +67,16 @@ public class CommandMclogs implements CommandExecutor {
         try {
             APIResponse response = MclogsAPI.share(file);
             if (response.success) {
-                commandSender.sendMessage(ChatColor.GREEN + "Your log has been shared: " + ChatColor.BLUE + response.url);
+                commandSender.sendMessage(ChatColor.GREEN + "Your log has been uploaded: " + ChatColor.BLUE + response.url);
             }
             else {
                 commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
-                logger.log(Level.SEVERE,"An error occurred when sharing your log");
+                logger.log(Level.SEVERE,"An error occurred while uploading your log");
                 logger.log(Level.SEVERE, response.error);
             }
         } catch (IOException e) {
             commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
-            logger.log(Level.SEVERE,"An error occurred when reading your log");
+            logger.log(Level.SEVERE,"An error occurred while reading your log");
             e.printStackTrace();
         }
     }
