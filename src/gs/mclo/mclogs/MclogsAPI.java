@@ -62,6 +62,8 @@ public class MclogsAPI {
         File logdir = new File(rundir + "/logs");
 
         String[] logs = logdir.list();
+        if (logs == null)
+            logs = new String[0];
 
         ArrayList<String> logsList = new ArrayList<>();
         for (String log:logs) {
@@ -69,9 +71,7 @@ public class MclogsAPI {
                 logsList.add(log);
         }
 
-        logs = new String[logsList.size()];
-
         Collections.sort(logsList);
-        return logsList.toArray(logs);
+        return logsList.toArray(new String[0]);
     }
 }
