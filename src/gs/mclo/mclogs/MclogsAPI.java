@@ -7,6 +7,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.zip.GZIPInputStream;
 
 public class MclogsAPI {
     private static String inputStreamToString (InputStream is) throws IOException {
@@ -20,7 +21,15 @@ public class MclogsAPI {
         return sb.toString();
     }
 
-    public static APIResponse shareLog(InputStream LogIS) throws IOException {
+    public static APIResponse share(String file) throws IOException {
+        //read log
+        InputStream LogIS = new FileInputStream(new File(file));
+
+        //decompress log
+        if (file.endsWith(".gz")) {
+            LogIS = new GZIPInputStream(LogIS);
+        }
+
         //read log to string
         String log = inputStreamToString(LogIS);
 

@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.GZIPInputStream;
 
 public class CommandMclogs implements CommandExecutor {
 
@@ -27,8 +26,7 @@ public class CommandMclogs implements CommandExecutor {
         if (args.length == 0) {
             //share latest.log
             logger.log(Level.INFO,"Sharing latest.log...");
-            File log = new File(runDir +"/logs/latest.log");
-            share(commandSender,log);
+            share(commandSender,runDir +"/logs/latest.log");
             return true;
         }
         else if (args.length == 1 && args[0].equals("list")) {
@@ -37,9 +35,14 @@ public class CommandMclogs implements CommandExecutor {
 
             commandSender.sendMessage(ChatColor.GREEN + "Available logs:");
 
-            String base = "tellraw " +commandSender.getName();
-            for (String log: logs) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), base + " {\"text\":\""+log+"\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/mclogs share "+log+"\"}}");
+            if (commandSender.getName().equals("CONSOLE")) {
+                commandSender.sendMessage(logs);
+            }
+            else {
+                String base = "tellraw " + commandSender.getName();
+                for (String log : logs) {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), base + " {\"text\":\"" + log + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/mclogs share " + log + "\"}}");
+                }
             }
             return true;
         }
@@ -49,8 +52,7 @@ public class CommandMclogs implements CommandExecutor {
                 return false;
             }
             logger.log(Level.INFO,"Sharing "+args[1]+"...");
-            File log = new File(runDir +"/logs/"+args[1]);
-            share(commandSender,log);
+            share(commandSender,runDir +"/logs/"+args[1]);
             return true;
         }
         else {
@@ -59,15 +61,11 @@ public class CommandMclogs implements CommandExecutor {
         }
     }
 
-    private void share(CommandSender commandSender, File f) {
+    private void share(CommandSender commandSender, String file) {
 
         Logger logger = commandSender.getServer().getLogger();
         try {
-            InputStream is = new FileInputStream(f);
-            if (f.getName().endsWith(".gz")) {
-                is = new GZIPInputStream(is);
-            }
-            APIResponse response = MclogsAPI.shareLog(is);
+            APIResponse response = MclogsAPI.share(file);
             if (response.success) {
                 commandSender.sendMessage(ChatColor.GREEN + "Your log has been shared: " + ChatColor.BLUE + response.url);
             }
@@ -86,9 +84,7 @@ public class CommandMclogs implements CommandExecutor {
     private String getRunDir(String dataPath) {
         String[] dataDir = dataPath.split("/");
         String[] baseDir = new String[dataDir.length - 2];
-        for (int i = 0; i < dataDir.length - 2; i++) {
-            baseDir[i] = dataDir[i];
-        }
+        if (dataDir.length - 2 >= 0) System.arraycopy(dataDir, 0, baseDir, 0, dataDir.length - 2);
         return String.join("/",baseDir);
     }
 }
