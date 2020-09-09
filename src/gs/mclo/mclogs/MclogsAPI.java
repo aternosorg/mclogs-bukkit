@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +42,7 @@ public class MclogsAPI {
         http.setDoOutput(true);
 
         //convert log to application/x-www-form-urlencoded
-        String content = "content=" + log;
+        String content = "content=" + URLEncoder.encode(log, StandardCharsets.UTF_8.toString());
         byte[] out = content.getBytes(StandardCharsets.UTF_8);
         int length = out.length;
 
