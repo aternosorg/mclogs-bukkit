@@ -26,12 +26,17 @@ public class CommandMclogs implements CommandExecutor {
         if (args.length == 0) {
             //share latest.log
             logger.log(Level.INFO,"Sharing latest.log...");
-            share(commandSender,runDir +"/logs/latest.log");
+            share(commandSender,"latest.log");
             return true;
         }
         else if (args.length == 1 && args[0].equals("list")) {
             //list logs
             String[] logs = MclogsAPI.listLogs(runDir);
+
+            if (logs.length == 0) {
+                commandSender.sendMessage("No logs available!");
+                return true;
+            }
 
             commandSender.sendMessage(ChatColor.GREEN + "Available logs:");
 
@@ -52,7 +57,7 @@ public class CommandMclogs implements CommandExecutor {
                 return false;
             }
             logger.log(Level.INFO,"Sharing "+args[1]+"...");
-            share(commandSender,runDir +"/logs/"+args[1]);
+            share(commandSender,args[1]);
             return true;
         }
         else {
@@ -62,10 +67,9 @@ public class CommandMclogs implements CommandExecutor {
     }
 
     private void share(CommandSender commandSender, String file) {
-
         Logger logger = commandSender.getServer().getLogger();
         try {
-            APIResponse response = MclogsAPI.share(file);
+            APIResponse response = MclogsAPI.share(runDir + "/logs/" + file);
             if (response.success) {
                 commandSender.sendMessage(ChatColor.GREEN + "Your log has been uploaded: " + ChatColor.BLUE + response.url);
             }
@@ -74,7 +78,11 @@ public class CommandMclogs implements CommandExecutor {
                 logger.log(Level.SEVERE,"An error occurred while uploading your log");
                 logger.log(Level.SEVERE, response.error);
             }
-        } catch (IOException e) {
+        }
+        catch (FileNotFoundException e) {
+            commandSender.sendMessage(ChatColor.RED + "The log file " + file + " doesn't exist. Use '/mclogs list' to list all logs.");
+        }
+        catch (IOException e) {
             commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
             logger.log(Level.SEVERE,"An error occurred while reading your log");
             e.printStackTrace();
