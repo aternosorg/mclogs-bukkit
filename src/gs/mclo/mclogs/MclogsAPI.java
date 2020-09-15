@@ -11,6 +11,10 @@ import java.util.Collections;
 import java.util.zip.GZIPInputStream;
 
 public class MclogsAPI {
+    public static String mcversion = "unknown";
+    public static String userAgent = "unknown";
+    public static String version = "unknown";
+
     private static String inputStreamToString (InputStream is) throws IOException {
         BufferedReader buf = new BufferedReader(new InputStreamReader(is));
         String line = buf.readLine();
@@ -49,6 +53,7 @@ public class MclogsAPI {
         //send log to api
         http.setFixedLengthStreamingMode(length);
         http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        http.setRequestProperty("User-Agent", userAgent + "/" + version + "/" + mcversion);
         http.connect();
         try (OutputStream os = http.getOutputStream()) {
             os.write(out);

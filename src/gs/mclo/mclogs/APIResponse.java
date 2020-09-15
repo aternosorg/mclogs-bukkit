@@ -3,10 +3,10 @@ package gs.mclo.mclogs;
 import com.google.gson.Gson;
 
 public class APIResponse {
-    public boolean success;
-    public String id;
-    public String url;
-    public String error;
+    public final boolean success;
+    public final String id;
+    public final String url;
+    public final String error;
 
     public APIResponse(boolean success, String id, String url, String error) {
         this.success = success;
