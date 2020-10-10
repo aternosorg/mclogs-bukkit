@@ -1,5 +1,5 @@
-# Aternos/mclogs-bukkit
-A bukkit plugin to easily share and analyse your server logs
+# mclogs-bukkit
+A bukkit plugin to easily share and analyse your server logs with [mclo.gs](https://mclo.gs)
 
 
 ### commands:
