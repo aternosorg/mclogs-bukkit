@@ -24,40 +24,55 @@ public class CommandMclogs implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         Logger logger = commandSender.getServer().getLogger();
         if (args.length == 0) {
-            //share latest.log
-            logger.log(Level.INFO,"Sharing latest.log...");
-            share(commandSender,"latest.log");
+            if (commandSender.hasPermission("mclogs.upload")) {
+                //share latest.log
+                logger.log(Level.INFO,"Sharing latest.log...");
+                share(commandSender,"latest.log");
+            }
+            else {
+                commandSender.sendMessage(ChatColor.RED + "You don't have the permission to use the command!");
+            }
             return true;
         }
         else if (args.length == 1 && args[0].equals("list")) {
             //list logs
-            String[] logs = MclogsAPI.listLogs(runDir);
 
-            if (logs.length == 0) {
-                commandSender.sendMessage("No logs available!");
-                return true;
-            }
+            if (commandSender.hasPermission("mclogs.list")) {
+                String[] logs = MclogsAPI.listLogs(runDir);
 
-            commandSender.sendMessage(ChatColor.GREEN + "Available logs:");
+                if (logs.length == 0) {
+                    commandSender.sendMessage("No logs available!");
+                    return true;
+                }
 
-            if (commandSender.getName().equals("CONSOLE")) {
-                commandSender.sendMessage(logs);
+                commandSender.sendMessage(ChatColor.GREEN + "Available logs:");
+
+                if (commandSender.getName().equals("CONSOLE")) {
+                    commandSender.sendMessage(logs);
+                } else {
+                    String base = "tellraw " + commandSender.getName();
+                    for (String log : logs) {
+                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), base + " {\"text\":\"" + log + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/mclogs share " + log + "\"}}");
+                    }
+                }
             }
             else {
-                String base = "tellraw " + commandSender.getName();
-                for (String log : logs) {
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), base + " {\"text\":\"" + log + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/mclogs share " + log + "\"}}");
-                }
+                commandSender.sendMessage(ChatColor.RED + "You don't have the permission to use the command!");
             }
             return true;
         }
         else if (args.length == 2 && args[0].equals("share")) {
             //share args[1]
-            if (args[1].contains("../") || !args[1].endsWith(".log") && !args[1].endsWith(".log.gz") ) {
-                return false;
+            if (commandSender.hasPermission("mclogs.share")) {
+                if (args[1].contains("../") || !args[1].endsWith(".log") && !args[1].endsWith(".log.gz")) {
+                    return false;
+                }
+                logger.log(Level.INFO, "Sharing " + args[1] + "...");
+                share(commandSender, args[1]);
             }
-            logger.log(Level.INFO,"Sharing "+args[1]+"...");
-            share(commandSender,args[1]);
+            else {
+                commandSender.sendMessage(ChatColor.RED + "You don't have the permission to use the command!");
+            }
             return true;
         }
         else {
