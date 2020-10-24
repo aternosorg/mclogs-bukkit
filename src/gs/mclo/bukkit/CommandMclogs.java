@@ -15,14 +15,15 @@ import java.util.logging.Logger;
 public class CommandMclogs implements CommandExecutor {
 
     private final String runDir;
+    private final Logger logger;
 
-    public CommandMclogs(String dataPath) {
+    public CommandMclogs(String dataPath, Logger logger) {
         runDir = getRunDir(dataPath);
+        this.logger = logger;
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        Logger logger = commandSender.getServer().getLogger();
         if (args.length == 0) {
             if (commandSender.hasPermission("mclogs.upload")) {
                 //share latest.log
@@ -82,7 +83,6 @@ public class CommandMclogs implements CommandExecutor {
     }
 
     private void share(CommandSender commandSender, String file) {
-        Logger logger = commandSender.getServer().getLogger();
         try {
             APIResponse response = MclogsAPI.share(runDir + "/logs/" + file);
             if (response.success) {
@@ -90,8 +90,7 @@ public class CommandMclogs implements CommandExecutor {
             }
             else {
                 commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
-                logger.log(Level.SEVERE,"An error occurred while uploading your log");
-                logger.log(Level.SEVERE, response.error);
+                logger.log(Level.SEVERE,"An error occurred while uploading your log", response.error);
             }
         }
         catch (FileNotFoundException e) {
@@ -99,8 +98,7 @@ public class CommandMclogs implements CommandExecutor {
         }
         catch (IOException e) {
             commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
-            logger.log(Level.SEVERE,"An error occurred while reading your log");
-            e.printStackTrace();
+            logger.log(Level.SEVERE,"An error occurred while reading your log", e);
         }
     }
 
