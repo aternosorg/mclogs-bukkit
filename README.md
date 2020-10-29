@@ -11,5 +11,3 @@ List all available log files
 
     /mclogs share <filename>
 Share a specific log file
-
-test
