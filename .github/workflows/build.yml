@@ -1,9 +1,7 @@
-name: Java CI with Gradle
+name: Master commit CI
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
     branches: [ master ]
 
 jobs:
@@ -21,3 +19,7 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - uses: actions/upload-artifact@v2
+      with:
+        name: mclogs-bukkit
+        path: build/libs/mclogs-bukkit.jar
