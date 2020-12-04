@@ -28,7 +28,7 @@ public class MclogsAPI {
 
     public static APIResponse share(String file) throws IOException {
         //read log
-        InputStream LogIS = new FileInputStream(new File(file));
+        InputStream LogIS = new FileInputStream(file);
 
         //decompress log
         if (file.endsWith(".gz")) {
