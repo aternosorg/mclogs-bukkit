@@ -8,8 +8,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import java.awt.*;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,9 +18,9 @@ public class CommandMclogs implements CommandExecutor {
     private final String runDir;
     private final Logger logger;
 
-    public CommandMclogs(String dataPath, Logger logger) {
-        runDir = getRunDir(dataPath);
+    public CommandMclogs(String runDir, Logger logger) {
         this.logger = logger;
+        this.runDir = runDir;
     }
 
     @Override
@@ -101,12 +101,5 @@ public class CommandMclogs implements CommandExecutor {
             commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
             logger.log(Level.SEVERE,"An error occurred while reading your log", e);
         }
-    }
-
-    private String getRunDir(String dataPath) {
-        String[] dataDir = dataPath.split("/");
-        String[] baseDir = new String[dataDir.length - 2];
-        if (dataDir.length - 2 >= 0) System.arraycopy(dataDir, 0, baseDir, 0, dataDir.length - 2);
-        return String.join("/",baseDir);
     }
 }
