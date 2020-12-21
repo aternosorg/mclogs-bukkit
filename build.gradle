@@ -19,3 +19,8 @@ dependencies {
 application {
     mainClassName = 'gs.mclo.bukkit.MclogsBukkitLoader'
 }
+
+jar {
+    from sourceSets.main.allSource
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
