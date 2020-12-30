@@ -91,7 +91,7 @@ public class CommandMclogs implements CommandExecutor {
             }
             else {
                 commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
-                logger.log(Level.SEVERE,"An error occurred while uploading your log", response.error);
+                logger.log(Level.SEVERE,"An error occurred while uploading your log: " + response.error);
             }
         }
         catch (FileNotFoundException e) {
