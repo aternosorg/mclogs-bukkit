@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 repositories {
@@ -13,14 +14,17 @@ repositories {
 
 dependencies {
     compileOnly 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
-    compileOnly 'com.google.code.gson:gson:2.8.6'
+
+    compile project(":mclogs-java")
 }
 
 application {
     mainClassName = 'gs.mclo.bukkit.MclogsBukkitLoader'
 }
 
-jar {
+shadowJar {
     from sourceSets.main.allSource
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    configurations = [project.configurations.compile]
+    archiveFileName = "mclogs-bukkit.jar"
 }

@@ -1,6 +1,6 @@
 package gs.mclo.bukkit;
 
-import gs.mclo.mclogs.MclogsAPI;
+import gs.mclo.java.MclogsAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;

@@ -1,7 +1,7 @@
 package gs.mclo.bukkit;
 
-import gs.mclo.mclogs.APIResponse;
-import gs.mclo.mclogs.MclogsAPI;
+import gs.mclo.java.APIResponse;
+import gs.mclo.java.MclogsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
