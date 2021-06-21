@@ -3,6 +3,8 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
+version = '2.2.0'
+
 repositories {
     jcenter()
     mavenCentral()
@@ -16,9 +18,17 @@ dependencies {
     compile project(":mclogs-java")
 }
 
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("plugin.yml") {
+        expand "version": project.version
+    }
+}
+
 shadowJar {
     from sourceSets.main.allSource
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     configurations = [project.configurations.compile]
-    archiveFileName = "mclogs-bukkit.jar"
+    archiveFileName = "mclogs-bukkit-${project.version}.jar"
 }

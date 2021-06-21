@@ -36,9 +36,9 @@ public class MclogsListCommand extends SubCommand {
 
         TextComponent message = new TextComponent(ChatColor.GREEN + "Available logs:");
         message.setBold(true);
-        for (int i = 0; i < logs.length; i++) {
-            TextComponent entry = new TextComponent(logs[i] + (i == logs.length - 1 ? "" : "\n"));
-            entry.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mclogs share " + logs[i]));
+        for (String log : logs) {
+            TextComponent entry = new TextComponent("\n" + log);
+            entry.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mclogs share " + log));
             entry.setBold(false);
             message.addExtra(entry);
         }
