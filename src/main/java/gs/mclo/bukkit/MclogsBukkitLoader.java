@@ -7,7 +7,10 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MclogsBukkitLoader extends JavaPlugin{
+public class MclogsBukkitLoader extends JavaPlugin {
+
+    private String rundir;
+
     @Override
     public void onEnable() {
         Logger logger = this.getLogger();
@@ -16,26 +19,24 @@ public class MclogsBukkitLoader extends JavaPlugin{
         MclogsAPI.userAgent = "Mclogs-bukkit";
         MclogsAPI.version = getDescription().getVersion();
 
-        String runDir = null;
         try {
-            runDir = getRunDir();
+            rundir = loadRunDir();
         }
         catch (Exception e) {
             logger.log(Level.SEVERE,"Unable to find server directory!", e);
+            return;
         }
-        if (runDir != null)
-            this.getCommand("mclogs").setExecutor(new CommandMclogs(runDir, logger));
+        this.getCommand("mclogs").setExecutor(new CommandMclogs(this));
     }
 
-    @Override
-    public void onDisable() {
-        //when disabling
-    }
-
-    private String getRunDir() {
+    private String loadRunDir() {
         File pluginsDir = getDataFolder().getParentFile().getAbsoluteFile();
         File runDir = pluginsDir.getParentFile().getAbsoluteFile();
         return runDir.getAbsolutePath();
+    }
+
+    public String getRunDir() {
+        return this.rundir;
     }
 
 }
