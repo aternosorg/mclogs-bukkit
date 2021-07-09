@@ -1,6 +1,7 @@
 package gs.mclo.bukkit;
 
 import gs.mclo.java.MclogsAPI;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -14,10 +15,15 @@ public class MclogsBukkitLoader extends JavaPlugin {
     @Override
     public void onEnable() {
         Logger logger = this.getLogger();
+        Configuration config = this.getConfig();
+        config.options().copyDefaults(true);
+        saveConfig();
 
         MclogsAPI.mcversion = getServer().getVersion();
         MclogsAPI.userAgent = "Mclogs-bukkit";
         MclogsAPI.version = getDescription().getVersion();
+        MclogsAPI.setApiHost(config.getString("api-host"));
+        MclogsAPI.setProtocol(config.getString("protocol"));
 
         try {
             rundir = loadRunDir();

@@ -1,0 +1,6 @@
+# mclogs host
+host: 'mclo.gs'
+# mclogs API host
+api-host: 'api.mclo.gs'
+# protocol used to interact with the mclogs API
+protocol: 'https'

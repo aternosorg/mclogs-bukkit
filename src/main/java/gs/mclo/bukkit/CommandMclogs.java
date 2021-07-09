@@ -62,7 +62,8 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
         try {
             APIResponse response = MclogsAPI.share(plugin.getRunDir() + "/logs/", file);
             if (response.success) {
-                commandSender.sendMessage(ChatColor.GREEN + "Your log has been uploaded: " + ChatColor.BLUE + response.url);
+                commandSender.sendMessage(ChatColor.GREEN + "Your log has been uploaded: " + ChatColor.BLUE +
+                        plugin.getConfig().get("protocol", "https") + "://" + plugin.getConfig().get("host", "mclo.gs") + "/" + response.id);
             }
             else {
                 commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");

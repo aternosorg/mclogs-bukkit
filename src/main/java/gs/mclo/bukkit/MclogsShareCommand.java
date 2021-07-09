@@ -23,6 +23,7 @@ public class MclogsShareCommand extends SubCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length != 1) return false;
         mclogs.log(Level.INFO, "Sharing " + args[0] + "...");
         mclogs.share(sender, args[0]);
         return true;
