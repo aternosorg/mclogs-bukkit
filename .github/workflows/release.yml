@@ -28,5 +28,5 @@ jobs:
           asset_content_type: application/java-archive
       - name: Publish to Modrinth
         env:
-          MODRINTH_TOKEN: secrets.MODRINTH_TOKEN
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: ./gradlew modrinth -Prelease=${{  github.event.release.tag_name }} -Pchangelog="${{  github.event.release.body }}"
