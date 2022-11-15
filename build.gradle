@@ -35,7 +35,7 @@ shadowJar {
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "6DdCzpTL"
-    uploadFile = shadowJar
+    uploadFile = "./build/libs/mclogs-bukkit-${project.version}.jar"
     gameVersions = [
             "1.19.2",
             "1.19",
