@@ -22,7 +22,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ github.event.upload_url }}
           asset_path: ./build/libs/mclogs-bukkit-${{ github.event.tag_name }}.jar
           asset_name: mclogs-bukkit-${{ github.event.tag_name }}.jar
           asset_content_type: application/java-archive
