@@ -1,7 +1,7 @@
 name: Release
 on:
   release:
-    - created
+    types: [published]
 jobs:
   build:
     runs-on: ubuntu-latest
