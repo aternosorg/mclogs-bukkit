@@ -1,6 +1,7 @@
 package gs.mclo.bukkit;
 
 import gs.mclo.java.APIResponse;
+import gs.mclo.java.Log;
 import gs.mclo.java.MclogsAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -9,8 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,9 +22,9 @@ import java.util.logging.Logger;
 
 public class CommandMclogs implements CommandExecutor, TabExecutor {
 
-    private final MclogsBukkitLoader plugin;
+    public final MclogsBukkitLoader plugin;
 
-    private final HashMap<String, SubCommand> subCommands = new HashMap<>();
+    public final HashMap<String, SubCommand> subCommands = new HashMap<>();
 
     public CommandMclogs(MclogsBukkitLoader plugin) {
         this.plugin = plugin;
@@ -59,24 +61,39 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
 
     public void share(CommandSender commandSender, String file) {
         Logger logger = plugin.getLogger();
+        Path directory = Paths.get(plugin.getRunDir());
+
+        Path log = directory.resolve("logs").resolve(file);
+
+        if (!log.toFile().exists()) {
+            log = directory.resolve("crash-reports").resolve(file);
+        }
+
+        if (!log.toFile().exists() || !log.getFileName().toString().matches(Log.ALLOWED_FILE_NAME_PATTERN.pattern())) {
+            commandSender.sendMessage(ChatColor.RED + "There is no log or crash report with the name '" + file
+                    + "'. Use '/mclogs list' to list all logs.");
+        }
+
         try {
-            APIResponse response = MclogsAPI.share(plugin.getRunDir() + "/logs/", file);
+            APIResponse response = MclogsAPI.share(log);
             if (response.success) {
-                commandSender.sendMessage(ChatColor.GREEN + "Your log has been uploaded: " + ChatColor.BLUE +
-                        plugin.getConfig().get("protocol", "https") + "://" + plugin.getConfig().get("host", "mclo.gs") + "/" + response.id);
+                commandSender.sendMessage(ChatColor.GREEN + "Your log has been uploaded: " + ChatColor.BLUE + this.getMclogsURL(response.id));
             }
             else {
                 commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
                 logger.log(Level.SEVERE,"An error occurred while uploading your log: " + response.error);
             }
         }
-        catch (FileNotFoundException e) {
-            commandSender.sendMessage(ChatColor.RED + "The log file " + file + " doesn't exist. Use '/mclogs list' to list all logs.");
-        }
         catch (IOException e) {
             commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
             logger.log(Level.SEVERE,"An error occurred while reading your log", e);
         }
+    }
+
+    public String getMclogsURL(String id) {
+        String protocol = plugin.getConfig().get("protocol", "https").toString();
+        String host = plugin.getConfig().get("host", "mclo.gs").toString();
+        return protocol + "://" + host + "/" + id;
     }
 
     @Override
@@ -92,6 +109,13 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
      */
     public String[] listLogs() {
         return MclogsAPI.listLogs(plugin.getRunDir());
+    }
+
+    /**
+     * @return crash reports
+     */
+    public String[] listCrashReports() {
+        return MclogsAPI.listCrashReports(plugin.getRunDir());
     }
 
     /**

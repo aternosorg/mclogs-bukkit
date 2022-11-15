@@ -1,6 +1,5 @@
 package gs.mclo.bukkit;
 
-import gs.mclo.java.MclogsAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -8,9 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MclogsListCommand extends SubCommand {
 
@@ -27,21 +24,30 @@ public class MclogsListCommand extends SubCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String[] logs = mclogs.listLogs();
+        TextComponent message = new TextComponent();
 
-        if (logs.length == 0) {
-            sender.sendMessage(ChatColor.RED + "No logs available!");
-            return true;
-        }
-
-        TextComponent message = new TextComponent(ChatColor.GREEN + "Available logs:");
-        message.setBold(true);
-        for (String log : logs) {
+        TextComponent logsHeader = new TextComponent("Available logs:");
+        logsHeader.setBold(true);
+        logsHeader.setColor(ChatColor.GREEN);
+        message.addExtra(logsHeader);
+        for (String log : mclogs.listLogs()) {
             TextComponent entry = new TextComponent("\n" + log);
             entry.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mclogs share " + log));
             entry.setBold(false);
             message.addExtra(entry);
         }
+
+        TextComponent crashReportsHeader = new TextComponent("\nAvailable crash reports:");
+        crashReportsHeader.setBold(true);
+        crashReportsHeader.setColor(ChatColor.GREEN);
+        message.addExtra(crashReportsHeader);
+        for (String crashReport : mclogs.listCrashReports()) {
+            TextComponent entry = new TextComponent("\n" + crashReport);
+            entry.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mclogs share " + crashReport));
+            entry.setBold(false);
+            message.addExtra(entry);
+        }
+
         sender.spigot().sendMessage(message);
         return true;
     }
