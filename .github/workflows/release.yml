@@ -27,4 +27,4 @@ jobs:
           asset_name: mclogs-bukkit-${{  github.event.release.tag_name }}.jar
           asset_content_type: application/java-archive
       - name: Publish to Modrinth
-        run: ./gradlew modrinth -Prelease=${{  github.event.release.tag_name }} -Pchangelog=${{  github.event.release.body }}
+        run: ./gradlew modrinth -Prelease=${{  github.event.release.tag_name }} -Pchangelog="${{  github.event.release.body }}"
