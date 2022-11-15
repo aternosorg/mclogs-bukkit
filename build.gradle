@@ -28,7 +28,6 @@ processResources {
 shadowJar {
     from sourceSets.main.allSource
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    configurations = [project.configurations.implementation]
     archiveFileName = "mclogs-bukkit-${version}.jar"
 }
 

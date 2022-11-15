@@ -14,4 +14,4 @@ jobs:
     - name: init submodule
       run: git submodule init && git submodule update
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew shadowJar
