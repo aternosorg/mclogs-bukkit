@@ -16,15 +16,15 @@ jobs:
       - name: init submodule
         run: git submodule init && git submodule update
       - name: Build with Gradle
-        run: ./gradlew shadowJar -Prelease=${{ github.event.tag_name }}
+        run: ./gradlew shadowJar -Prelease=${{  github.event.release.tag_name }}
       - name: Upload artifacts
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: ${{ github.event.upload_url }}
-          asset_path: ./build/libs/mclogs-bukkit-${{ github.event.tag_name }}.jar
-          asset_name: mclogs-bukkit-${{ github.event.tag_name }}.jar
+          upload_url: ${{  github.event.release.upload_url }}
+          asset_path: ./build/libs/mclogs-bukkit-${{  github.event.release.tag_name }}.jar
+          asset_name: mclogs-bukkit-${{  github.event.release.tag_name }}.jar
           asset_content_type: application/java-archive
       - name: Publish to Modrinth
-        run: ./gradlew modrinth -Prelease=${{ github.event.tag_name }} -Pchangelog=${{ github.event.body }}
+        run: ./gradlew modrinth -Prelease=${{  github.event.release.tag_name }} -Pchangelog=${{  github.event.release.body }}
