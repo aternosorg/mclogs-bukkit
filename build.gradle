@@ -1,9 +1,10 @@
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
-version = '2.3.1'
+version = project.hasProperty('release') ? project.getProperty('release') : 'dev'
 
 repositories {
     mavenCentral()
@@ -12,9 +13,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT'
-
-    compile project(":mclogs-java")
+    compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
+    implementation project(":mclogs-java")
 }
 
 processResources {
@@ -28,6 +28,40 @@ processResources {
 shadowJar {
     from sourceSets.main.allSource
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    configurations = [project.configurations.compile]
-    archiveFileName = "mclogs-bukkit-${project.version}.jar"
+    configurations = [project.configurations.implementation]
+    archiveFileName = "mclogs-bukkit-${version}.jar"
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "6DdCzpTL"
+    uploadFile = shadowJar
+    gameVersions = [
+            "1.19.2",
+            "1.19",
+            "1.18.2",
+            "1.18.1",
+            "1.18",
+            "1.17.1",
+            "1.17",
+            "1.16.5",
+            "1.16.4",
+            "1.16.3",
+            "1.16.2",
+            "1.16.1",
+            "1.16",
+            "1.15.2",
+            "1.15.1",
+            "1.15",
+            "1.14.4",
+            "1.14.3",
+            "1.14.2",
+            "1.14.1",
+            "1.14",
+            "1.13.2",
+            "1.13.1",
+            "1.13",
+    ]
+    loaders = ["spigot", "paper", "purpur"]
+    changelog = project.hasProperty('changelog') ? project.getProperty("changelog") : ''
 }

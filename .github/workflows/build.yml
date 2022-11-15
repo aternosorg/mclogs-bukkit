@@ -1,14 +1,8 @@
 name: Master commit
-
-on:
-  push:
-    branches: [ master ]
-
+on: [commit, pull_request]
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
@@ -21,6 +15,3 @@ jobs:
       run: git submodule init && git submodule update
     - name: Build with Gradle
       run: ./gradlew build
-    - uses: actions/upload-artifact@v2
-      with:
-        path: build/libs/mclogs-bukkit-*.jar
