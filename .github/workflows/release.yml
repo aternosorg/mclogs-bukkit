@@ -1,7 +1,8 @@
 name: Release
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - '*.*.*'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,17 +18,15 @@ jobs:
       - name: init submodule
         run: git submodule init && git submodule update
       - name: Build with Gradle
-        run: ./gradlew shadowJar -Prelease=${{  github.event.release.tag_name }}
-      - name: Upload artifacts
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        run: ./gradlew shadowJar -Prelease=${{  github.ref }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{  github.event.release.upload_url }}
-          asset_path: ./build/libs/mclogs-bukkit-${{  github.event.release.tag_name }}.jar
-          asset_name: mclogs-bukkit-${{  github.event.release.tag_name }}.jar
-          asset_content_type: application/java-archive
+          files: |
+            ./build/libs/mclogs-bukkit-${{  github.ref }}.jar
+          body_path: ${{ github.workspace }}/CHANGELOG.md
+          name: v${{ github.ref }}
       - name: Publish to Modrinth
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-        run: ./gradlew modrinth -Prelease=${{  github.event.release.tag_name }} -Pchangelog="${{  github.event.release.body }}"
+        run: ./gradlew modrinth -Prelease=${{  github.ref }}
