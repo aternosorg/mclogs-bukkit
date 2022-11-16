@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
 import java.io.File;
+import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,8 +41,6 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (args.length == 0) {
             if (sender.hasPermission("mclogs.upload")) {
-                //share latest.log
-                plugin.getLogger().log(Level.INFO,"Sharing latest.log...");
                 share(sender,"latest.log");
             }
             else {
@@ -61,17 +60,30 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
 
     public void share(CommandSender commandSender, String file) {
         Logger logger = plugin.getLogger();
+        logger.log(Level.INFO, "Sharing " + file + "...");
+
         Path directory = Paths.get(plugin.getRunDir());
+        Path logs = directory.resolve("logs");
+        Path crashReports = directory.resolve("crash-reports");
 
-        Path log = directory.resolve("logs").resolve(file);
-
+        Path log = logs.resolve(file);
         if (!log.toFile().exists()) {
-            log = directory.resolve("crash-reports").resolve(file);
+            log = crashReports.resolve(file);
         }
 
-        if (!log.toFile().exists() || !log.getFileName().toString().matches(Log.ALLOWED_FILE_NAME_PATTERN.pattern())) {
+        boolean isInAllowedDirectory = false;
+        try {
+            Path logPath = log.toRealPath();
+            isInAllowedDirectory = (logs.toFile().exists() && logPath.startsWith(logs.toRealPath()))
+                    || (crashReports.toFile().exists() && logPath.startsWith(crashReports.toRealPath()));
+        }
+        catch (IOException ignored) {}
+
+        if (!log.toFile().exists() || !isInAllowedDirectory
+                || !log.getFileName().toString().matches(Log.ALLOWED_FILE_NAME_PATTERN.pattern())) {
             commandSender.sendMessage(ChatColor.RED + "There is no log or crash report with the name '" + file
                     + "'. Use '/mclogs list' to list all logs.");
+            return;
         }
 
         try {

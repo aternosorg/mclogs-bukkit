@@ -63,5 +63,5 @@ modrinth {
             "1.13",
     ]
     loaders = ["spigot", "paper", "purpur"]
-    changelog = project.hasProperty('changelog') ? project.getProperty("changelog") : ''
+    changelog = rootProject.file("CHANGELOG.md").text
 }

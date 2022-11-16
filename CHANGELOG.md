@@ -1,0 +1,2 @@
+- Log file that's being shared
+- Prevent sharing of files outside the log or crash-reports folder
