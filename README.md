@@ -1,7 +1,6 @@
-# mclogs-bukkit
 ![logo](https://mclo.gs/img/logo.png)
 
-With this plugin/mod, you can upload your Minecraft server log to [mclogs](https://mclo.gs) directly from your server
+With this plugin, you can upload your Minecraft server log to [mclogs](https://mclo.gs) directly from your server
 with one simple command. It's even possible to export old server log files, e.g. after a crash. Critical information 
 like IP addresses are automatically hidden to ensure safety and privacy.
 
