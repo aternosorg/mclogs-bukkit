@@ -18,15 +18,15 @@ jobs:
       - name: init submodule
         run: git submodule init && git submodule update
       - name: Build with Gradle
-        run: ./gradlew shadowJar -Prelease=${{  github.ref }}
+        run: ./gradlew shadowJar -Prelease=${{  github.ref_name }}
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./build/libs/mclogs-bukkit-${{  github.ref }}.jar
+            ./build/libs/mclogs-bukkit-${{  github.ref_name }}.jar
           body_path: ${{ github.workspace }}/CHANGELOG.md
-          name: v${{ github.ref }}
+          name: v${{ github.ref_name }}
       - name: Publish to Modrinth
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-        run: ./gradlew modrinth -Prelease=${{  github.ref }}
+        run: ./gradlew modrinth -Prelease=${{  github.ref_name }}
