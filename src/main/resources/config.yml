@@ -1,6 +1,4 @@
-# mclogs host
-host: 'mclo.gs'
-# mclogs API host
-api-host: 'api.mclo.gs'
-# protocol used to interact with the mclogs API
-protocol: 'https'
+# URL used to view logs
+view-logs-url: https://mclo.gs
+# API Base URL
+api-base-url: https://api.mclo.gs

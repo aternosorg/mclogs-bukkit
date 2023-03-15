@@ -2,19 +2,25 @@ plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "com.modrinth.minotaur" version "2.+"
+    id "xyz.jpenilla.run-paper" version "2.0.1"
 }
 
 version = project.hasProperty('release') ? project.getProperty('release') : 'dev'
 
 repositories {
     mavenCentral()
-    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven {
+        name = "Spigot"
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
     mavenLocal()
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
-    implementation project(":mclogs-java")
+    implementation 'gs.mclo:api:3.0.1'
+    implementation "net.kyori:adventure-api:4.13.0"
+    implementation "net.kyori:adventure-platform-bukkit:4.2.0"
 }
 
 processResources {
@@ -28,7 +34,13 @@ processResources {
 shadowJar {
     from sourceSets.main.allSource
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveFileName = "mclogs-bukkit-${version}.jar"
+    archiveFileName = "mclogs-bukkit-${project.version}.jar"
+}
+
+tasks {
+    runServer {
+        minecraftVersion("1.19.3")
+    }
 }
 
 modrinth {

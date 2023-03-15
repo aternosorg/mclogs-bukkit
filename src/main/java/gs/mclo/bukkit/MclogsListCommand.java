@@ -1,10 +1,11 @@
 package gs.mclo.bukkit;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,37 +24,35 @@ public class MclogsListCommand extends SubCommand {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        TextComponent message = new TextComponent();
-
-        TextComponent logsHeader = new TextComponent("Available logs:");
-        logsHeader.setBold(true);
-        logsHeader.setColor(ChatColor.GREEN);
-        message.addExtra(logsHeader);
-        for (String log : mclogs.listLogs()) {
-            TextComponent entry = new TextComponent("\n" + log);
-            entry.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mclogs share " + log));
-            entry.setBold(false);
-            message.addExtra(entry);
-        }
-
-        TextComponent crashReportsHeader = new TextComponent("\nAvailable crash reports:");
-        crashReportsHeader.setBold(true);
-        crashReportsHeader.setColor(ChatColor.GREEN);
-        message.addExtra(crashReportsHeader);
-        for (String crashReport : mclogs.listCrashReports()) {
-            TextComponent entry = new TextComponent("\n" + crashReport);
-            entry.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mclogs share " + crashReport));
-            entry.setBold(false);
-            message.addExtra(entry);
-        }
-
-        sender.spigot().sendMessage(message);
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        mclogs.plugin.adventure().sender(sender).sendMessage(Component.empty()
+                .append(generateList("logs", mclogs.listLogs()))
+                .appendNewline()
+                .appendNewline()
+                .append(generateList("crash-reports", mclogs.listCrashReports()))
+        );
         return true;
     }
 
+    protected @NotNull Component generateList(String name, String[] entries) {
+        if (entries.length == 0) {
+            return Component.text("No " + name + " available.");
+        }
+        Component list = Component.empty().append(Component
+                .text("Available " + name + ":")
+                .decorate(TextDecoration.UNDERLINED));
+        for (String log : entries) {
+            list = list.appendNewline().append(Component
+                    .text(log)
+                    .clickEvent(ClickEvent.runCommand("/mclogs share " + log))
+            );
+        }
+
+        return list;
+    }
+
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         return new ArrayList<>();
     }
 }

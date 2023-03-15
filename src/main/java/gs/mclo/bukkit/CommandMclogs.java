@@ -1,16 +1,16 @@
 package gs.mclo.bukkit;
 
-import gs.mclo.java.APIResponse;
-import gs.mclo.java.Log;
-import gs.mclo.java.MclogsAPI;
-import org.bukkit.ChatColor;
+import gs.mclo.api.Log;
+import gs.mclo.api.response.UploadLogResponse;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,11 +23,12 @@ import java.util.logging.Logger;
 
 public class CommandMclogs implements CommandExecutor, TabExecutor {
 
-    public final MclogsBukkitLoader plugin;
+    public final MclogsPlugin plugin;
 
     public final HashMap<String, SubCommand> subCommands = new HashMap<>();
 
-    public CommandMclogs(MclogsBukkitLoader plugin) {
+
+    public CommandMclogs(MclogsPlugin plugin) {
         this.plugin = plugin;
         this.registerSubCommands();
     }
@@ -38,13 +39,16 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
         if (args.length == 0) {
             if (sender.hasPermission("mclogs.upload")) {
                 share(sender,"latest.log");
             }
             else {
-                sender.sendMessage(ChatColor.RED + "You don't have the permission to use the command!");
+                plugin.adventure().sender(sender).sendMessage(Component
+                        .text("You don't have the permissions to use the command!")
+                        .color(NamedTextColor.RED)
+                );
             }
             return true;
         }
@@ -52,7 +56,10 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
         SubCommand subCommand = subCommands.get(args[0]);
         if (subCommand == null) return false;
         if (subCommand.getPermission() != null && !sender.hasPermission(subCommand.getPermission())) {
-            sender.sendMessage(ChatColor.RED + "You don't have the permissions required to execute this command.");
+            plugin.adventure().sender(sender).sendMessage(Component
+                    .text("You don't have the permissions to use the command!")
+                    .color(NamedTextColor.RED)
+            );
             return true;
         }
         return subCommand.onCommand(sender, command, s, Arrays.copyOfRange(args, 1, args.length));
@@ -81,35 +88,35 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
 
         if (!log.toFile().exists() || !isInAllowedDirectory
                 || !log.getFileName().toString().matches(Log.ALLOWED_FILE_NAME_PATTERN.pattern())) {
-            commandSender.sendMessage(ChatColor.RED + "There is no log or crash report with the name '" + file
-                    + "'. Use '/mclogs list' to list all logs.");
+            plugin.adventure().sender(commandSender).sendMessage(Component
+                    .text("There is no log or crash report with the name '" + file + "'. Use '/mclogs list' to list all logs.")
+                    .color(NamedTextColor.RED)
+            );
             return;
         }
 
         try {
-            APIResponse response = MclogsAPI.share(log);
-            if (response.success) {
-                commandSender.sendMessage(ChatColor.GREEN + "Your log has been uploaded: " + ChatColor.BLUE + this.getMclogsURL(response.id));
-            }
-            else {
-                commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
-                logger.log(Level.SEVERE,"An error occurred while uploading your log: " + response.error);
-            }
+            UploadLogResponse response = plugin.getMclogsClient().uploadLog(log);
+            plugin.adventure().sender(commandSender).sendMessage(Component
+                    .text("Your log has been uploadded:")
+                    .color(NamedTextColor.GREEN)
+                    .appendSpace()
+                    .append(Component.text(response.getUrl())
+                            .clickEvent(ClickEvent.openUrl(response.getUrl()))
+                            .color(NamedTextColor.AQUA))
+            );
         }
         catch (IOException e) {
-            commandSender.sendMessage(ChatColor.RED + "An error occurred. Check your log for more details");
+            plugin.adventure().sender(commandSender).sendMessage(Component
+                    .text("An error occurred. Check your log for more details.")
+                    .color(NamedTextColor.RED)
+            );
             logger.log(Level.SEVERE,"An error occurred while reading your log", e);
         }
     }
 
-    public String getMclogsURL(String id) {
-        String protocol = plugin.getConfig().get("protocol", "https").toString();
-        String host = plugin.getConfig().get("host", "mclo.gs").toString();
-        return protocol + "://" + host + "/" + id;
-    }
-
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if (args.length == 0) return new ArrayList<>(subCommands.keySet());
         SubCommand subCommand = subCommands.get(args[0]);
         if (subCommand == null) return new ArrayList<>(subCommands.keySet());
@@ -120,22 +127,13 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
      * @return log files
      */
     public String[] listLogs() {
-        return MclogsAPI.listLogs(plugin.getRunDir());
+        return plugin.getMclogsClient().listLogsInDirectory(plugin.getRunDir());
     }
 
     /**
      * @return crash reports
      */
     public String[] listCrashReports() {
-        return MclogsAPI.listCrashReports(plugin.getRunDir());
-    }
-
-    /**
-     * log a message
-     * @param level log level
-     * @param message log message
-     */
-    public void log(Level level, String message) {
-        plugin.getLogger().log(level, message);
+        return plugin.getMclogsClient().listCrashReportsInDirectory(plugin.getRunDir());
     }
 }

@@ -1,2 +1,3 @@
-- Log file that's being shared
-- Prevent sharing of files outside the log or crash-reports folder
+- Update to mclogs 3.0.1
+- Use MiniMessage for formatting
+- Replace config with direct urls

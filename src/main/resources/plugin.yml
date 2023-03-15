@@ -4,7 +4,7 @@ description: Easily share and analyse your server logs
 author: Aternos Gmbh
 website: https://mclo.gs
 
-main: gs.mclo.bukkit.MclogsBukkitLoader
+main: gs.mclo.bukkit.MclogsPlugin
 api-version: 1.13
 
 commands:
