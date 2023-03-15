@@ -15,8 +15,6 @@ jobs:
           java-version: 8
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: init submodule
-        run: git submodule init && git submodule update
       - name: Build with Gradle
         run: ./gradlew shadowJar -Prelease=${{  github.ref_name }}
       - name: Create Release
