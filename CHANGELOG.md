@@ -1,3 +1,1 @@
-- Update to mclogs 3.0.1
-- Use MiniMessage for formatting
-- Replace config with direct urls
+- Enable folia support
