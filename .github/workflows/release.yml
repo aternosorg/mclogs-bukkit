@@ -17,6 +17,14 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew shadowJar -Prelease=${{  github.ref_name }}
+      - name: Publish to Modrinth
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: ./gradlew modrinth -Prelease=${{  github.ref_name }}
+      - name: Publish to CurseForge
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+        run: ./gradlew publishCurseforge -Prelease=${{  github.ref_name }}
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -24,7 +32,3 @@ jobs:
             ./build/libs/mclogs-bukkit-${{  github.ref_name }}.jar
           body_path: ${{ github.workspace }}/CHANGELOG.md
           name: v${{ github.ref_name }}
-      - name: Publish to Modrinth
-        env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-        run: ./gradlew modrinth -Prelease=${{  github.ref_name }}
