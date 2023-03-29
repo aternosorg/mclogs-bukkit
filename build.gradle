@@ -3,11 +3,9 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "com.modrinth.minotaur" version "2.+"
     id "xyz.jpenilla.run-paper" version "2.0.1"
-    id "net.darkhax.curseforgegradle" version "1.0.11"
 }
 
 version = project.hasProperty('release') ? project.getProperty('release') : 'dev'
-changelog = rootProject.file("CHANGELOG.md").text
 
 repositories {
     mavenCentral()
@@ -50,6 +48,8 @@ modrinth {
     projectId = "6DdCzpTL"
     uploadFile = "./build/libs/mclogs-bukkit-${project.version}.jar"
     gameVersions = [
+            "1.19.4",
+            "1.19.3",
             "1.19.2",
             "1.19.1",
             "1.19",
@@ -75,82 +75,7 @@ modrinth {
             "1.13.2",
             "1.13.1",
             "1.13",
-            "1.12.2",
-            "1.12.1",
-            "1.12",
-            "1.11.2",
-            "1.11.1",
-            "1.11",
-            "1.10.2",
-            "1.10.1",
-            "1.10",
-            "1.9.4",
-            "1.9.3",
-            "1.9.2",
-            "1.9.1",
-            "1.9",
-            "1.8.9",
-            "1.8.8",
-            "1.8.7",
-            "1.8.6",
-            "1.8.5",
-            "1.8.4",
-            "1.8.3",
     ]
     loaders = ["spigot", "paper", "purpur"]
-    changelog = rootProject.changelog
-}
-
-task publishCurseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-    apiToken = System.getenv("CURSEFORGE_TOKEN") ?: ''
-    def mainFile = upload(278568, "./build/libs/mclogs-bukkit-${project.version}.jar")
-    mainFile.releaseType = 'release'
-    mainFile.changelogType = 'markdown'
-    mainFile.changelog = rootProject.changelog
-    mainFile.addJavaVersion("1.19.2")
-    mainFile.addJavaVersion("1.19.1")
-    mainFile.addJavaVersion("1.19")
-    mainFile.addJavaVersion("1.18.2")
-    mainFile.addJavaVersion("1.18.1")
-    mainFile.addJavaVersion("1.18")
-    mainFile.addJavaVersion("1.17.1")
-    mainFile.addJavaVersion("1.17")
-    mainFile.addJavaVersion("1.16.5")
-    mainFile.addJavaVersion("1.16.4")
-    mainFile.addJavaVersion("1.16.3")
-    mainFile.addJavaVersion("1.16.2")
-    mainFile.addJavaVersion("1.16.1")
-    mainFile.addJavaVersion("1.16")
-    mainFile.addJavaVersion("1.15.2")
-    mainFile.addJavaVersion("1.15.1")
-    mainFile.addJavaVersion("1.15")
-    mainFile.addJavaVersion("1.14.4")
-    mainFile.addJavaVersion("1.14.3")
-    mainFile.addJavaVersion("1.14.2")
-    mainFile.addJavaVersion("1.14.1")
-    mainFile.addJavaVersion("1.14")
-    mainFile.addJavaVersion("1.13.2")
-    mainFile.addJavaVersion("1.13.1")
-    mainFile.addJavaVersion("1.13")
-    mainFile.addJavaVersion("1.12.2")
-    mainFile.addJavaVersion("1.12.1")
-    mainFile.addJavaVersion("1.12")
-    mainFile.addJavaVersion("1.11.2")
-    mainFile.addJavaVersion("1.11.1")
-    mainFile.addJavaVersion("1.11")
-    mainFile.addJavaVersion("1.10.2")
-    mainFile.addJavaVersion("1.10.1")
-    mainFile.addJavaVersion("1.10")
-    mainFile.addJavaVersion("1.9.4")
-    mainFile.addJavaVersion("1.9.3")
-    mainFile.addJavaVersion("1.9.2")
-    mainFile.addJavaVersion("1.9.1")
-    mainFile.addJavaVersion("1.9")
-    mainFile.addJavaVersion("1.8.9")
-    mainFile.addJavaVersion("1.8.8")
-    mainFile.addJavaVersion("1.8.7")
-    mainFile.addJavaVersion("1.8.6")
-    mainFile.addJavaVersion("1.8.5")
-    mainFile.addJavaVersion("1.8.4")
-    mainFile.addJavaVersion("1.8.3")
+    changelog = rootProject.file("CHANGELOG.md").text
 }
