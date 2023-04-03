@@ -1,1 +1,1 @@
-- Enable folia support
+- Fix modrinth publishing
