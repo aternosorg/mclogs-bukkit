@@ -5,7 +5,10 @@ plugins {
     id "xyz.jpenilla.run-paper" version "2.0.1"
 }
 
-version = project.hasProperty('release') ? project.getProperty('release') : 'dev'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version = project.hasProperty('release') ? project.getProperty('release') : '1.2'
 
 repositories {
     mavenCentral()
@@ -34,7 +37,7 @@ processResources {
 shadowJar {
     from sourceSets.main.allSource
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveFileName = "mclogs-bukkit-${project.version}.jar"
+    archiveFileName = "MCN-${project.version}.jar"
 }
 
 tasks {

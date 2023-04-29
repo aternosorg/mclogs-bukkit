@@ -1,1 +1,1 @@
-- Fix modrinth publishing
+- Úpráva pro MC Návody

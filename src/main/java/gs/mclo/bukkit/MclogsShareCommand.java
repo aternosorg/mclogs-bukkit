@@ -20,7 +20,7 @@ public class MclogsShareCommand extends SubCommand {
 
     @Override
     String getPermission() {
-        return "mclogs.share";
+        return "mcn.share";
     }
 
     @Override

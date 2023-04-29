@@ -34,10 +34,10 @@ public class MclogsPlugin extends JavaPlugin {
         try {
             this.rundir = loadRunDir();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Unable to find server directory!", e);
+            logger.log(Level.SEVERE, "Nelze najít adresář serveru!", e);
             return;
         }
-        this.getCommand("mclogs").setExecutor(new CommandMclogs(this));
+        this.getCommand("log").setExecutor(new CommandMclogs(this));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MclogsPlugin extends JavaPlugin {
      */
     public @NotNull BukkitAudiences adventure() {
         if (this.adventure == null) {
-            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+            throw new IllegalStateException("Pokusil se o přístup k Adventure, když byl plugin zakázán!");
         }
         return this.adventure;
     }
@@ -74,11 +74,7 @@ public class MclogsPlugin extends JavaPlugin {
         Instance instance = new Instance();
         String apiBaseUrl = config.getString("api-base-url");
         if (!config.isSet("api-base-url") && config.isSet("api-host")) {
-            String protocol = config.getString("protocol");
-            if (protocol == null || !protocol.matches("(?i)https?")) {
-                protocol = "https";
-            }
-            apiBaseUrl = protocol + "://" + config.getString("api-host");
+            apiBaseUrl = "https://api.mcnavody.eu";
             config.set("api-base-url", apiBaseUrl);
             config.set("api-host", null);
             config.set("protocol", null);

@@ -1,31 +1,31 @@
-name: Mclogs
+name: MCN
 version: $version
-description: Easily share and analyse your server logs
-author: Aternos Gmbh
-website: https://mclo.gs
+description: Snadné sdílení a analýza logů serveru
+author: Fejby
+website: https://log.mcnavody.eu/
 
 main: gs.mclo.bukkit.MclogsPlugin
 api-version: 1.13
 folia-supported: true
 
 commands:
-  mclogs:
-    description: Upload your logs to https://mclo.gs
-    usage: "/mclogs <list|share> <filename>"
+  log:
+    description: Nahrajte své logy na https://log.mcnavody.eu/
+    usage: "/log <list|share> <soubor>"
 
 permissions:
-  mclogs.*:
-    description: Gives access to all mclogs commands
+  mcn.*:
+    description: Umožňuje přístup ke všem příkazům
     children:
-      mclogs.upload: true
-      mclogs.list: true
-      mclogs.share: true
-  mclogs.upload:
-    description: Allows uploading the current log file
+      mcn.upload: true
+      mcn.list: true
+      mcn.share: true
+  mcn.upload:
+    description: Umožňuje nahrát aktuální soubor logu
     default: op
-  mclogs.list:
-    description: Allows listing available log files
+  mcn.list:
+    description: Umožňuje vypsat dostupné soubory logů
     default: op
-  mclogs.share:
-    description: Allows sharing of specific log files
+  mcn.share:
+    description: Umožňuje sdílení konkrétních souborů logů
     default: op

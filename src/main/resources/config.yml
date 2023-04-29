@@ -1,4 +1,4 @@
-# URL used to view logs
-view-logs-url: https://mclo.gs
-# API Base URL
-api-base-url: https://api.mclo.gs
+# Adresa sloužící k zobrazení logů
+view-logs-url: https://log.mcnavody.eu/
+# Základní adresa API
+api-base-url: https://api.mcnavody.eu/

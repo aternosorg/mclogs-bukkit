@@ -1,52 +1,46 @@
 <br />
 <div align="center">
   <a href="https://mclo.gs">
-    <img src="https://camo.githubusercontent.com/00ceb02aa64f302025c1e7b071f8d2bbd672aaa15376ba7c58a2929327fdc8be/68747470733a2f2f6d636c6f2e67732f696d672f6c6f676f2e706e67" alt="Logo" width="350" height="120">
+    <img src="https://i.imgur.com/DjYGfsA.png" alt="Logo" width="120" height="120">
   </a>
 
-<h3 align="center">Server plugin</h3>
+<h2 align="center">MC Návody plugin</h2>
 
-  <p align="center">
-    Upload your logs to <a href="https://mclo.gs" target="_blank">mclo.gs</a> with a single command to analyze or share them.
+  <p  align="center">
+    Nahrajte své logy na <a href="https://log.mcnavody.eu/" target="_blank">log.mcnavody.eu</a> pomocí jediného příkazu a analyzujte je nebo sdílejte.
     <br />
-    Critical information like IP addresses are automatically hidden to ensure safety and privacy.
+    Citlivé informace, jako jsou IP adresy, jsou automaticky skryty, aby byla zajištěna bezpečnost a soukromí.
     <br />
-    It's also possible to export old server log files, e.g. after a crash.
+    Je také možné exportovat staré soubory logu serveru, např. po havárii.
     <br />
-    <a href="https://modrinth.com/plugin/mclogs" target="_blank"><strong>Download on modrinth »</strong></a>
+    <a href="https://github.com/Fejby/MCNavody-plugin/releases" target="_blank"><strong>Stáhnout plugin</strong></a>
     <br />
-    <br />
-    <a href="https://www.spigotmc.org/resources/mclo-gs.47502/" target="_blank">SpigotMC</a>
-    ·
-    <a href="https://www.curseforge.com/minecraft/bukkit-plugins/mclo-gs" target="_blank">CurseForge</a>
-    ·
-    <a href="https://hangar.papermc.io/Aternos/mclogs" target="_blank">Hangar</a>
   </p>
 </div>
 
 
-## About mclo.gs
+## O Pastebinu
 
-<a href="https://mclo.gs" target="_blank">mclo.gs</a> allows you to quickly share and analyze logs for Minecraft servers and clients. It highlights different log levels, removes sensitive information like IP-Addresses and detects common problems as well as version information.
-## Plugin features
+<a href="https://log.mcnavody.eu/" target="_blank">log.mcnavody.eu</a> pastebin je založenej na projektu od Aternos GmbH, my jsme si projekt pžizpůsobili pro naše účely. Pastebin možňuje rychle sdílet a analyzovat protokoly serverů a klientů Minecraftu. Zvýrazňuje různé úrovně logů, odstraňuje citlivé informace, jako jsou IP adresy, a zjišťuje běžné problémy i informace o verzích.
+## Funkce pluginu
 
-**Upload your current server log**
-
-```
-/mclogs
-```
-Requires the permission `mclogs`
-
-**List server logs and crash reports**
+**Nahrání aktuálního logu serveru**
 
 ```
-/mclogs list
+/log
 ```
-Requires the permission `mclogs.list`
+Vyžaduje oprávnění `mcn.upload`
 
-**Share a specific log or crash report**
+**Seznam logů serveru a hlášení o pádů**
 
 ```
-/mclogs share <file-name>
+/log list
 ```
-Requires the permission `mclogs.share`
+Vyžaduje oprávnění `mcn.list`
+
+**Sdílet konkrétní protokol nebo hlášení o havárii**
+
+```
+/log share <soubor>
+```
+Vyžaduje oprávnění `mcn.share`
