@@ -1,7 +1,7 @@
 <br />
 <div align="center">
   <a href="https://mclo.gs">
-    <img src="https://i.imgur.com/DjYGfsA.png" alt="Logo" width="120" height="120">
+    <img src="https://i.imgur.com/oNb3YaX.png" alt="Logo">
   </a>
 
 <h2 align="center">MC Návody plugin</h2>
