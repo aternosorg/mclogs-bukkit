@@ -51,6 +51,7 @@ modrinth {
     projectId = "6DdCzpTL"
     uploadFile = shadowJar
     gameVersions = [
+            "1.20",
             "1.19.4",
             "1.19.3",
             "1.19.2",
