@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -96,15 +97,26 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
         }
 
         try {
-            UploadLogResponse response = plugin.getMclogsClient().uploadLog(log);
-            plugin.adventure().sender(commandSender).sendMessage(Component
-                    .text("Your log has been uploadded:")
-                    .color(NamedTextColor.GREEN)
-                    .appendSpace()
-                    .append(Component.text(response.getUrl())
-                            .clickEvent(ClickEvent.openUrl(response.getUrl()))
-                            .color(NamedTextColor.AQUA))
-            );
+            CompletableFuture<UploadLogResponse> response = plugin.getMclogsClient().uploadLog(log);
+            response.whenComplete((res, ex) -> {
+                if(ex != null) {
+                    plugin.adventure().sender(commandSender).sendMessage(Component
+                            .text("An error occurred. Check your log for more details.")
+                            .color(NamedTextColor.RED)
+                    );
+                    logger.log(Level.SEVERE,"An error occurred while reading your log", ex);
+                    return;
+                }
+                res.setClient(plugin.getMclogsClient());
+                plugin.adventure().sender(commandSender).sendMessage(Component
+                        .text("Your log has been uploadded:")
+                        .color(NamedTextColor.GREEN)
+                        .appendSpace()
+                        .append(Component.text(res.getUrl())
+                                .clickEvent(ClickEvent.openUrl(res.getUrl()))
+                                .color(NamedTextColor.AQUA)));
+
+            });
         }
         catch (IOException e) {
             plugin.adventure().sender(commandSender).sendMessage(Component

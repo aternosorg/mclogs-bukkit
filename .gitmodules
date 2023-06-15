@@ -1,0 +1,3 @@
+[submodule "mclogs-java"]
+	path = mclogs-java
+	url = http://github.com/aternosorg/mclogs-java.git

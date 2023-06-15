@@ -1,7 +1,3 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
-}
-
 rootProject.name = 'mclogs-bukkit'
+include ':mclogs-java'
+project(':mclogs-java').projectDir = new File('./mclogs-java/')
