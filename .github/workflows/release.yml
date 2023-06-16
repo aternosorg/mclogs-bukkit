@@ -16,7 +16,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew shadowJar -Prelease=${{  github.ref_name }}
+        run: ./gradlew shadowJar -Prelease=${{  github.ref_name }} --no-daemon
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
