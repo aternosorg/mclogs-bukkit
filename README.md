@@ -1,7 +1,7 @@
 <br />
 <div align="center">
   <a href="https://mclo.gs">
-    <img src="https://mclo.gs/img/logo.png" alt="Logo" width="350" height="120">
+    <img src="https://mclo.gs/img/logo.png" alt="Logo" width="512" height="145">
   </a>
 
 <h3 align="center">Server plugin</h3>
