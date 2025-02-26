@@ -25,6 +25,11 @@
 </div>
 
 
+> [!WARNING]  
+> All variants of this mod/plugin have merged into the [mclogs-integration](https://github.com/aternosorg/mclogs-integration) repository.
+> This repository is no longer maintained and only remains as an archive.
+
+
 ## About mclo.gs
 
 <a href="https://mclo.gs" target="_blank">mclo.gs</a> allows you to quickly share and analyze logs for Minecraft servers and clients. It highlights different log levels, removes sensitive information like IP-Addresses and detects common problems as well as version information.
